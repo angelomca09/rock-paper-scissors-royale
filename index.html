@@ -13,8 +13,9 @@
   <script>
     const width = 500;
     const height = 500;
+    const speed = 2;
     window.onload = () => {
-      const fps = 30;
+      const fps = 40;
       scene = document.getElementById("scene");
       scene.width = width;
       scene.height = height;
@@ -26,16 +27,24 @@
     balls = [];
     types = ["rock", "paper", "scissors"];
     diameter = 10;
+    radius = diameter / 2;
 
     for (var i = 0, j = 0; i < balls_number; i++) {
       j = 0;
       if (i >= balls_number / 3) j = 1;
       if (i >= (balls_number / 3) * 2) j = 2;
-      const type = balls.push({
+      const ball = {
         x: Math.round(Math.random() * width),
         y: Math.round(Math.random() * height),
+        xs: Math.round(Math.random() * speed - speed / 2),
+        ys: Math.round(Math.random() * speed - speed / 2),
         type: types[j],
-      });
+      };
+
+      if (ball.xs === 0) ball.xs = -1;
+      if (ball.ys === 0) ball.ys = -1;
+
+      balls.push(ball);
     }
 
     /* console.log(balls.filter((b) => b.type === "rock").length);
@@ -52,11 +61,25 @@
         const ball = balls[i];
         //Draw each ball
         context.beginPath();
-        context.arc(ball.x, ball.y, diameter / 2, 0, 2 * Math.PI);
+        context.arc(ball.x, ball.y, radius, 0, 2 * Math.PI);
         context.fill();
 
+        move(ball);
+        checkBorderCollision(ball);
         //TODO: Check collision
       }
+    }
+
+    function move(ball) {
+      ball.x += ball.xs;
+      ball.y += ball.ys;
+    }
+
+    function checkBorderCollision(ball) {
+      const nextX = (Math.abs(ball.xs) + radius) * (ball.xs > 0 ? 1 : -1);
+      const nextY = (Math.abs(ball.ys) + radius) * (ball.ys > 0 ? 1 : -1);
+      if (ball.x + nextX <= 0 || ball.x + nextX >= width) ball.xs *= -1;
+      if (ball.y + nextY <= 0 || ball.y + nextY >= height) ball.ys *= -1;
     }
   </script>
 </html>
