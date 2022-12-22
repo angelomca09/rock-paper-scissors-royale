@@ -5,6 +5,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock Paper & Scissors Battle Royale</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body></body>
+  <body>
+    <canvas id="scene"></canvas>
+  </body>
+  <script>
+    const width = 500;
+    const height = 500;
+    window.onload = () => {
+      const fps = 30;
+      scene = document.getElementById("scene");
+      scene.width = width;
+      scene.height = height;
+      context = scene.getContext("2d");
+      setInterval(run, 1000 / fps);
+    };
+
+    balls_number = 60;
+    balls = [];
+    types = ["rock", "paper", "scissors"];
+    diameter = 10;
+
+    for (var i = 0, j = 0; i < balls_number; i++) {
+      j = 0;
+      if (i >= balls_number / 3) j = 1;
+      if (i >= (balls_number / 3) * 2) j = 2;
+      const type = balls.push({
+        x: Math.round(Math.random() * width),
+        y: Math.round(Math.random() * height),
+        type: types[j],
+      });
+    }
+
+    /* console.log(balls.filter((b) => b.type === "rock").length);
+    console.log(balls.filter((b) => b.type === "paper").length);
+    console.log(balls.filter((b) => b.type === "scissors").length); */
+
+    function run() {
+      context.fillStyle = "black";
+      context.fillRect(0, 0, scene.width, scene.height);
+
+      context.fillStyle = "SkyBlue";
+
+      for (var i = 0; i < balls.length; i++) {
+        const ball = balls[i];
+        //Draw each ball
+        context.beginPath();
+        context.arc(ball.x, ball.y, diameter / 2, 0, 2 * Math.PI);
+        context.fill();
+
+        //TODO: Check collision
+      }
+    }
+  </script>
 </html>
