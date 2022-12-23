@@ -56,10 +56,11 @@
       context.fillStyle = "black";
       context.fillRect(0, 0, scene.width, scene.height);
 
-      context.fillStyle = "SkyBlue";
-
       for (var i = 0; i < balls.length; i++) {
         const ball = balls[i];
+        if (ball.type === "rock") context.fillStyle = "Blue";
+        if (ball.type === "paper") context.fillStyle = "Yellow";
+        if (ball.type === "scissors") context.fillStyle = "Red";
         //Draw each ball
         context.beginPath();
         context.arc(ball.x, ball.y, radius, 0, 2 * Math.PI);
@@ -91,7 +92,6 @@
           const sideY = Math.abs(ball.y - otherBall.y);
           const hypotenuse = Math.sqrt(sideX * sideX + sideY * sideY);
           if (hypotenuse <= diameter) {
-            console.log("teset");
             ball.xs *= -1;
             ball.ys *= -1;
             otherBall.xs *= -1;
