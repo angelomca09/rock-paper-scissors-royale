@@ -14,6 +14,7 @@
     const width = 500;
     const height = 500;
     const speed = 2;
+
     window.onload = () => {
       const fps = 40;
       scene = document.getElementById("scene");
@@ -26,6 +27,29 @@
     balls_number = 60;
     balls = [];
     types = ["rock", "paper", "scissors"];
+
+    rockImg = new Image();
+    rockImg.src = "./assets/rock.png";
+    rockImg.onload = () => {
+      drawParameters.rock.canRender = true;
+    };
+    paperImg = new Image();
+    paperImg.src = "./assets/paper.png";
+    paperImg.onload = () => {
+      drawParameters.paper.canRender = true;
+    };
+    scissorsImg = new Image();
+    scissorsImg.src = "./assets/scissors.png";
+    scissorsImg.onload = () => {
+      drawParameters.scissors.canRender = true;
+    };
+
+    drawParameters = {
+      rock: { color: "Blue", image: rockImg, canRender: false },
+      paper: { color: "Yellow", image: paperImg, canRender: false },
+      scissors: { color: "Red", image: scissorsImg, canRender: false },
+    };
+
     diameter = 10;
     radius = diameter / 2;
 
@@ -48,24 +72,14 @@
       balls.push(ball);
     }
 
-    /* console.log(balls.filter((b) => b.type === "rock").length);
-        console.log(balls.filter((b) => b.type === "paper").length);
-        console.log(balls.filter((b) => b.type === "scissors").length); */
-
     function run() {
       context.fillStyle = "black";
       context.fillRect(0, 0, scene.width, scene.height);
 
       for (var i = 0; i < balls.length; i++) {
         const ball = balls[i];
-        if (ball.type === "rock") context.fillStyle = "Blue";
-        if (ball.type === "paper") context.fillStyle = "Yellow";
-        if (ball.type === "scissors") context.fillStyle = "Red";
-        //Draw each ball
-        context.beginPath();
-        context.arc(ball.x, ball.y, radius, 0, 2 * Math.PI);
-        context.fill();
 
+        drawBall(ball);
         move(ball);
         checkBorderCollision(ball);
         checkBallCollision(ball);
@@ -138,6 +152,24 @@
             }
           }
         }
+      }
+    }
+
+    function drawBall(ball) {
+      const drawParameter = drawParameters[ball.type];
+      if (drawParameter.canRender) {
+        context.drawImage(
+          drawParameter.image,
+          ball.x,
+          ball.y,
+          diameter,
+          diameter
+        );
+      } else {
+        context.fillStyle = drawParameter.color;
+        context.beginPath();
+        context.arc(ball.x, ball.y, radius, 0, 2 * Math.PI);
+        context.fill();
       }
     }
   </script>
