@@ -34,6 +34,7 @@
       if (i >= balls_number / 3) j = 1;
       if (i >= (balls_number / 3) * 2) j = 2;
       const ball = {
+        id: i,
         x: Math.round(Math.random() * width),
         y: Math.round(Math.random() * height),
         xs: Math.round(Math.random() * speed - speed / 2),
@@ -48,8 +49,8 @@
     }
 
     /* console.log(balls.filter((b) => b.type === "rock").length);
-    console.log(balls.filter((b) => b.type === "paper").length);
-    console.log(balls.filter((b) => b.type === "scissors").length); */
+        console.log(balls.filter((b) => b.type === "paper").length);
+        console.log(balls.filter((b) => b.type === "scissors").length); */
 
     function run() {
       context.fillStyle = "black";
@@ -66,7 +67,7 @@
 
         move(ball);
         checkBorderCollision(ball);
-        //TODO: Check collision
+        checkBallCollision(ball);
       }
     }
 
@@ -80,6 +81,24 @@
       const nextY = (Math.abs(ball.ys) + radius) * (ball.ys > 0 ? 1 : -1);
       if (ball.x + nextX <= 0 || ball.x + nextX >= width) ball.xs *= -1;
       if (ball.y + nextY <= 0 || ball.y + nextY >= height) ball.ys *= -1;
+    }
+
+    function checkBallCollision(ball) {
+      for (var i = 0; i < balls.length; i++) {
+        const otherBall = balls[i];
+        if (ball.id !== otherBall.id) {
+          const sideX = Math.abs(ball.x - otherBall.x);
+          const sideY = Math.abs(ball.y - otherBall.y);
+          const hypotenuse = Math.sqrt(sideX * sideX + sideY * sideY);
+          if (hypotenuse <= diameter) {
+            console.log("teset");
+            ball.xs *= -1;
+            ball.ys *= -1;
+            otherBall.xs *= -1;
+            otherBall.ys *= -1;
+          }
+        }
+      }
     }
   </script>
 </html>
