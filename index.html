@@ -96,6 +96,46 @@
             ball.ys *= -1;
             otherBall.xs *= -1;
             otherBall.ys *= -1;
+
+            switch (ball.type) {
+              case "rock": {
+                switch (otherBall.type) {
+                  case "rock":
+                    break;
+                  case "paper":
+                    ball.type = "paper";
+                    break;
+                  case "scissors":
+                    otherBall.type = "rock";
+                    break;
+                }
+                break;
+              }
+              case "paper":
+                switch (otherBall.type) {
+                  case "rock":
+                    otherBall.type = "paper";
+                    break;
+                  case "paper":
+                    break;
+                  case "scissors":
+                    ball.type = "scissors";
+                    break;
+                }
+                break;
+              case "scissors":
+                switch (otherBall.type) {
+                  case "rock":
+                    ball.type = "rock";
+                    break;
+                  case "paper":
+                    otherBall.type = "scissors";
+                    break;
+                  case "scissors":
+                    break;
+                }
+                break;
+            }
           }
         }
       }
