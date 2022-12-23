@@ -11,65 +11,68 @@
     <canvas id="scene"></canvas>
   </body>
   <script>
-    const width = 500;
-    const height = 500;
+    const width = 700;
+    const height = 700;
     const speed = 2;
+    const fps = 40;
+    const diameter = 30;
+    const radius = diameter / 2;
 
-    window.onload = () => {
-      const fps = 40;
-      scene = document.getElementById("scene");
-      scene.width = width;
-      scene.height = height;
-      context = scene.getContext("2d");
-      setInterval(run, 1000 / fps);
+    const balls_number = 60;
+    const balls = [];
+    const types = ["rock", "paper", "scissors"];
+
+    const rockImg = new Image();
+    rockImg.src = "./assets/rock.png";
+    const paperImg = new Image();
+    paperImg.src = "./assets/paper.png";
+    const scissorsImg = new Image();
+    scissorsImg.src = "./assets/scissors.png";
+
+    const drawParameters = {
+      rock: { color: "Red", image: rockImg, canRender: false },
+      paper: { color: "Yellow", image: paperImg, canRender: false },
+      scissors: { color: "Blue", image: scissorsImg, canRender: false },
     };
 
-    balls_number = 60;
-    balls = [];
-    types = ["rock", "paper", "scissors"];
-
-    rockImg = new Image();
-    rockImg.src = "./assets/rock.png";
     rockImg.onload = () => {
       drawParameters.rock.canRender = true;
     };
-    paperImg = new Image();
-    paperImg.src = "./assets/paper.png";
     paperImg.onload = () => {
       drawParameters.paper.canRender = true;
     };
-    scissorsImg = new Image();
-    scissorsImg.src = "./assets/scissors.png";
     scissorsImg.onload = () => {
       drawParameters.scissors.canRender = true;
     };
 
-    drawParameters = {
-      rock: { color: "Blue", image: rockImg, canRender: false },
-      paper: { color: "Yellow", image: paperImg, canRender: false },
-      scissors: { color: "Red", image: scissorsImg, canRender: false },
+    window.onload = () => {
+      scene = document.getElementById("scene");
+      scene.width = width;
+      scene.height = height;
+      context = scene.getContext("2d");
+      populateBalls();
+      setInterval(run, 1000 / fps);
     };
 
-    diameter = 10;
-    radius = diameter / 2;
+    function populateBalls() {
+      for (var i = 0, j = 0; i < balls_number; i++) {
+        j = 0;
+        if (i >= balls_number / 3) j = 1;
+        if (i >= (balls_number / 3) * 2) j = 2;
+        const ball = {
+          id: i,
+          x: Math.round(Math.random() * width),
+          y: Math.round(Math.random() * height),
+          xs: Math.round(Math.random() * speed - speed / 2),
+          ys: Math.round(Math.random() * speed - speed / 2),
+          type: types[j],
+        };
 
-    for (var i = 0, j = 0; i < balls_number; i++) {
-      j = 0;
-      if (i >= balls_number / 3) j = 1;
-      if (i >= (balls_number / 3) * 2) j = 2;
-      const ball = {
-        id: i,
-        x: Math.round(Math.random() * width),
-        y: Math.round(Math.random() * height),
-        xs: Math.round(Math.random() * speed - speed / 2),
-        ys: Math.round(Math.random() * speed - speed / 2),
-        type: types[j],
-      };
+        if (ball.xs === 0) ball.xs = -1;
+        if (ball.ys === 0) ball.ys = -1;
 
-      if (ball.xs === 0) ball.xs = -1;
-      if (ball.ys === 0) ball.ys = -1;
-
-      balls.push(ball);
+        balls.push(ball);
+      }
     }
 
     function run() {
@@ -78,11 +81,11 @@
 
       for (var i = 0; i < balls.length; i++) {
         const ball = balls[i];
-
-        drawBall(ball);
         move(ball);
         checkBorderCollision(ball);
         checkBallCollision(ball);
+
+        drawBall(ball);
       }
     }
 
@@ -160,8 +163,8 @@
       if (drawParameter.canRender) {
         context.drawImage(
           drawParameter.image,
-          ball.x,
-          ball.y,
+          ball.x - radius,
+          ball.y - radius,
           diameter,
           diameter
         );
