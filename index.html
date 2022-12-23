@@ -160,6 +160,10 @@
 
     function drawBall(ball) {
       const drawParameter = drawParameters[ball.type];
+      context.fillStyle = drawParameter.color;
+      context.beginPath();
+      context.arc(ball.x, ball.y, radius, 0, 2 * Math.PI);
+      context.fill();
       if (drawParameter.canRender) {
         context.drawImage(
           drawParameter.image,
@@ -168,11 +172,6 @@
           diameter,
           diameter
         );
-      } else {
-        context.fillStyle = drawParameter.color;
-        context.beginPath();
-        context.arc(ball.x, ball.y, radius, 0, 2 * Math.PI);
-        context.fill();
       }
     }
   </script>
