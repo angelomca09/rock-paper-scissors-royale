@@ -109,6 +109,18 @@
           const sideY = Math.abs(ball.y - otherBall.y);
           const hypotenuse = Math.sqrt(sideX * sideX + sideY * sideY);
           if (hypotenuse <= diameter) {
+            // calulating the point of collision
+            var colPointX = (ball.x * radius + otherBall.x * radius) / diameter;
+            var colPointY = (ball.y * radius + otherBall.y * radius) / diameter;
+
+            //stoping overlap
+            ball.x = colPointX + (radius * (ball.x - otherBall.x)) / hypotenuse;
+            ball.y = colPointY + (radius * (ball.y - otherBall.y)) / hypotenuse;
+            otherBall.x =
+              colPointX + (radius * (otherBall.x - ball.x)) / hypotenuse;
+            otherBall.y =
+              colPointY + (radius * (otherBall.y - ball.y)) / hypotenuse;
+
             ball.xs *= -1;
             ball.ys *= -1;
             otherBall.xs *= -1;
